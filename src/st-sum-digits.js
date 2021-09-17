@@ -13,12 +13,12 @@ import { NotImplementedError } from '../extensions/index.js';
  *
  */
 export default function getSumOfDigits(num) {
-   let numbers = num.toString().split("");
+    let numbers = num.toString().split("");
     let result = 0;
     let sum = numbers.reduce(function(acc, item){
       result = Number(acc) + Number(item);
       return result;
-    },0);
+    }, 0);
     if (result >= 10) {
      return getSumOfDigits(result);
     } else {
