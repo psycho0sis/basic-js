@@ -11,5 +11,6 @@ import { NotImplementedError } from '../extensions/index.js';
  *
  */
 export default function encodeLine(str) {
-  let result = str.replace(/(.)\1+/g, (match, p1) => match.length + p1)
+  let result = str.replace(/(.)\1+/g, (match, letter) => match.length + letter)
+  return result;
 }
