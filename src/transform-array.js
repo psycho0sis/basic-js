@@ -14,20 +14,27 @@ import { NotImplementedError } from '../extensions/index.js';
  * 
  */
 export default function transform(arr) {
-  let newArr = JSON.parse(JSON.stringify(arr));
-  for(let i = 0; i < newArr.length; i++){
-    if (Array.isArray(newArr[i])) {
-      let j = newArr[i].length;
-      while (j--) {
-        if (newArr[i][j] === '--double-next' && newArr[i][j + 1]){
-            newArr[i].splice(newArr[i][j + 1], 0, newArr[i][j + 1])
-       } else if (newArr[i][j] === '--double-prev' && newArr[i][j - 1]){
-         newArr[i].splice(newArr[i][j - 1], 0, newArr[i][j - 1])
-       }
-      } 
-    } else {
-      throw new Error("'arr' parameter must be an instance of the Array!");
-    }
+  if (!Array.isArray(arr)) {
+    throw new Error("\'arr\' parameter must be an instance of the Array!");
   }
-   return newArr;
+    let newArr = JSON.parse(JSON.stringify(arr));
+        if (newArr[0] === '--discard-prev' || newArr[0] === '--double-prev'){
+         newArr.splice(0, 1)
+      }else if (newArr[newArr.length - 1] === '--double-next' || newArr[newArr.length - 1] === '--discard-next'){
+        newArr.splice(-1, 1)
+      }
+    newArr.forEach(function(item, index){
+      if (item === '--double-next'){
+      newArr.splice(index, 1, newArr[index + 1])
+      } else if (item === '--double-prev'){
+        newArr.splice(index, 1, newArr[index - 2])
+      } else if ((item === '--discard-next' && newArr[index + 2] === '--discard-prev') || (item === '--discard-next' && newArr[index + 2] === '--double-prev')){
+       newArr.splice(index, 3);
+      } else if (item === '--discard-next'){
+       newArr.splice(index, 2);
+      } else if (item === '--discard-prev'){
+        newArr.splice(index - 1, 2)
+      } 
+   })
+  return newArr;
 }
