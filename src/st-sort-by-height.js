@@ -1,4 +1,4 @@
-import { NotImplementedError } from '../extensions/index.js';
+import { NotImplementedError } from "../extensions/index.js";
 
 /**
  * Given an array with heights, sort them except if the value is -1.
@@ -12,19 +12,20 @@ import { NotImplementedError } from '../extensions/index.js';
  * The result should be [-1, 150, 160, 170, -1, -1, 180, 190]
  */
 export default function sortByHeight(arr) {
- let n = arr.length;
-    for (let i = 0; i < n - 1; i++){ 
-      for (let j = 0; j < n - 1 - i; j++){ 
-        if (arr[j + 1] === -1 && arr[j + 2]) {
-          let t = arr[j + 2]; 
-            arr[j + 2] = arr[j]; 
-            arr[j] = t; 
-        } else if (arr[j + 1] < arr[j]){ 
-          let t = arr[j + 1]; 
-            arr[j + 1] = arr[j]; 
-            arr[j] = t; 
-        }
-       }
-     }                     
-    return arr;
+  const b = arr.slice();
+  let pos = [];
+  let i = -1;
+  while ((i = arr.indexOf(-1, i + 1)) > -1) {
+    pos.push(i);
+  }
+  const rpos = pos.slice();
+  while (rpos.length) {
+    b.splice(rpos.pop(), 1);
+  }
+
+  b.sort((a, b) => a - b);
+  while (pos.length) {
+    b.splice(pos.shift(), 0, -1);
+  }
+  return b;
 }
